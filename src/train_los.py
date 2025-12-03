@@ -5,12 +5,13 @@ Menggunakan PyCaret untuk Low Code Machine Learning (Regresi)
 
 import pandas as pd
 import numpy as np
+import os
 from pycaret.regression import *
 import warnings
 warnings.filterwarnings('ignore')
 
 
-def train_los_model(data_path, target_col='LOS', test_size=0.2):
+def train_los_model(data_path, target_col='LOS_days', test_size=0.2):
     """
     Train model untuk prediksi Length of Stay menggunakan PyCaret
     
@@ -51,8 +52,6 @@ def train_los_model(data_path, target_col='LOS', test_size=0.2):
         feature_selection=True,
         remove_multicollinearity=True,
         multicollinearity_threshold=0.95,
-        ignore_low_variance=True,
-        silent=True,
         verbose=False
     )
     
@@ -60,24 +59,37 @@ def train_los_model(data_path, target_col='LOS', test_size=0.2):
     
     # Compare models
     print("\n3. Membandingkan berbagai model regresi...")
-    best_models = compare_models(
-        include=['lightgbm', 'xgboost', 'rf', 'et', 'gbr', 'ada', 'dt'],
-        sort='RMSE',
-        n_select=3,
-        verbose=False
-    )
-    
-    print("   Model terbaik:")
-    for i, model in enumerate(best_models, 1):
-        print(f"   {i}. {type(model).__name__}")
+    try:
+        best_models = compare_models(
+            include=['lightgbm', 'xgboost', 'rf', 'et', 'gbr', 'ada', 'dt'],
+            sort='RMSE',
+            n_select=3,
+            verbose=False
+        )
+        
+        print("   Model terbaik:")
+        for i, model in enumerate(best_models, 1):
+            print(f"   {i}. {type(model).__name__}")
+    except Exception as e:
+        print(f"   Warning: Error saat compare models: {str(e)}")
+        print("   Mencoba model alternatif...")
+        best_models = compare_models(
+            include=['rf', 'et', 'gbr', 'ada', 'dt'],
+            sort='RMSE',
+            n_select=3,
+            verbose=False
+        )
+        print("   Model terbaik:")
+        for i, model in enumerate(best_models, 1):
+            print(f"   {i}. {type(model).__name__}")
     
     # Pilih model LightGBM (sesuai dokumen)
     print("\n4. Memilih model LightGBM (sesuai dokumen)...")
     try:
         lgbm_model = create_model('lightgbm', verbose=False)
         print("   LightGBM model berhasil dibuat!")
-    except:
-        print("   LightGBM tidak tersedia, menggunakan model terbaik...")
+    except Exception as e:
+        print(f"   LightGBM tidak tersedia ({str(e)}), menggunakan model terbaik...")
         lgbm_model = best_models[0]
     
     # Tune model
@@ -100,7 +112,9 @@ def train_los_model(data_path, target_col='LOS', test_size=0.2):
     print("   Model finalized!")
     
     # Save model
-    model_path = '../models/los_model'
+    model_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models')
+    os.makedirs(model_dir, exist_ok=True)
+    model_path = os.path.join(model_dir, 'los_model')
     save_model(final_model, model_path)
     print(f"\n8. Model disimpan ke: {model_path}")
     
@@ -112,7 +126,7 @@ def train_los_model(data_path, target_col='LOS', test_size=0.2):
     return final_model, predictions
 
 
-def train_extra_tree_regressor(data_path, target_col='LOS', test_size=0.2):
+def train_extra_tree_regressor(data_path, target_col='LOS_days', test_size=0.2):
     """
     Train Extra Tree Regressor (sesuai dokumen)
     
@@ -145,7 +159,6 @@ def train_extra_tree_regressor(data_path, target_col='LOS', test_size=0.2):
         train_size=1-test_size,
         session_id=123,
         normalize=True,
-        silent=True,
         verbose=False
     )
     
@@ -166,7 +179,9 @@ def train_extra_tree_regressor(data_path, target_col='LOS', test_size=0.2):
     final_et = finalize_model(tuned_et)
     
     # Save
-    model_path = '../models/los_et_model'
+    model_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'models')
+    os.makedirs(model_dir, exist_ok=True)
+    model_path = os.path.join(model_dir, 'los_et_model')
     save_model(final_et, model_path)
     print(f"\n7. Model disimpan ke: {model_path}")
     
@@ -183,18 +198,17 @@ if __name__ == "__main__":
     # Train LightGBM model
     model, predictions = train_los_model(
         data_path=data_path,
-        target_col='LOS',
+        target_col='LOS_days',
         test_size=0.2
     )
     
     # Train Extra Tree Regressor
     et_model = train_extra_tree_regressor(
         data_path=data_path,
-        target_col='LOS',
+        target_col='LOS_days',
         test_size=0.2
     )
     
     print("\n" + "=" * 60)
     print("TRAINING SELESAI!")
     print("=" * 60)
-

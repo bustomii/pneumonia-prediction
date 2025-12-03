@@ -40,23 +40,46 @@ class DataPreprocessor:
             return None
     
     def explore_data(self):
-        """Eksplorasi data dasar"""
+        """Eksplorasi data dasar (EDA)"""
         if self.df is None:
             print("Data belum dimuat. Jalankan load_data() terlebih dahulu.")
             return
         
         print("=" * 50)
-        print("INFORMASI DATASET")
+        print("EKSPLORASI DATA (EDA)")
         print("=" * 50)
-        print(f"\nShape: {self.df.shape}")
-        print(f"\nKolom: {list(self.df.columns)}")
-        print(f"\nInfo Data:")
+        print(f"\n1. Shape: {self.df.shape}")
+        print(f"   - Jumlah baris: {self.df.shape[0]}")
+        print(f"   - Jumlah kolom: {self.df.shape[1]}")
+        
+        print(f"\n2. Kolom: {list(self.df.columns)}")
+        
+        print(f"\n3. Info Data:")
         print(self.df.info())
-        print(f"\nStatistik Deskriptif:")
+        
+        print(f"\n4. Statistik Deskriptif:")
         print(self.df.describe())
-        print(f"\nMissing Values:")
-        print(self.df.isnull().sum())
-        print(f"\nDuplikat: {self.df.duplicated().sum()}")
+        
+        print(f"\n5. Missing Values:")
+        missing = self.df.isnull().sum()
+        if missing.sum() > 0:
+            print(missing[missing > 0])
+        else:
+            print("Tidak ada missing values")
+        
+        print(f"\n6. Duplikat: {self.df.duplicated().sum()}")
+        
+        print(f"\n7. Distribusi Variabel Kategorikal:")
+        categorical_cols = self.df.select_dtypes(include=['object']).columns
+        for col in categorical_cols[:5]:  # Tampilkan 5 pertama
+            print(f"\n   {col}:")
+            print(f"   {self.df[col].value_counts().head()}")
+        
+        print(f"\n8. Distribusi Variabel Numerik (Target):")
+        if 'Mortality' in self.df.columns:
+            print(f"   Mortality: {self.df['Mortality'].value_counts().to_dict()}")
+        if 'LOS_days' in self.df.columns:
+            print(f"   LOS_days: Min={self.df['LOS_days'].min()}, Max={self.df['LOS_days'].max()}, Mean={self.df['LOS_days'].mean():.2f}")
         
     def handle_missing_values(self, strategy='mean'):
         """
@@ -96,6 +119,11 @@ class DataPreprocessor:
         if self.df is None:
             print("Data belum dimuat.")
             return
+        
+        # Drop Patient_ID karena itu identifier, bukan feature
+        if 'Patient_ID' in self.df.columns:
+            self.df = self.df.drop(columns=['Patient_ID'])
+            print("Patient_ID dihapus (identifier, bukan feature)")
         
         categorical_cols = self.df.select_dtypes(include=['object']).columns
         

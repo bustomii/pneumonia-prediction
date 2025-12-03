@@ -1,0 +1,132 @@
+Ringkasan Isi:
+BAB I - Pendahuluan
+Latar belakang: pneumonia sebagai masalah kesehatan global, 
+dengan peningkatan kasus di Indonesia dan Jepang
+Tujuan: mengembangkan model prediksi mortalitas dan lama 
+rawat inap pasien pneumonia menggunakan machine learning dengan low code PyCaret
+Dataset: 669 pasien pneumonia dari 2 rumah sakit di Jepang (201 perempuan, 468 laki-laki)
+
+BAB II - Tinjauan Pustaka
+Konsep AI, Deep Learning, Machine Learning
+Metode Low Code dan platformnya (OutSystems, Kissflow, Appian)
+Tools: PyCaret, Google Colaboratory, TensorFlow
+Literatur review: 10 penelitian terdahulu tentang prediksi pneumonia
+
+BAB III - Metode Penelitian
+Rencana penelitian (Mei-Juli 2025)
+Data preprocessing dan eksplorasi
+Metode PyCaret untuk low code ML
+Algoritma: Light Gradient Boosting Machine (LightGBM) 
+dan Extra Tree Regressor (ETR)
+Teknik pengumpulan data: studi pustaka
+
+
+
+
+R² (R-squared) atau koefisien determinasi adalah metrik evaluasi untuk model regresi. Berikut penjelasannya:
+Apa itu R²?
+R² mengukur proporsi variansi variabel target (dalam hal ini LOS - Length of Stay) yang dapat dijelaskan oleh model. Nilai R² berkisar dari 0 hingga 1 (atau bisa negatif jika model lebih buruk dari baseline).
+Untuk apa R² digunakan?
+Mengukur goodness of fit model
+Seberapa baik model menjelaskan variasi data
+Semakin tinggi R², semakin baik model menjelaskan variansi target
+Membandingkan model
+Membandingkan performa beberapa model regresi
+Model dengan R² lebih tinggi umumnya lebih baik
+Interpretasi praktis
+R² = 0.7 berarti model menjelaskan 70% variansi target
+R² = 0.25 berarti model menjelaskan 25% variansi target
+Interpretasi nilai R²
+R² = 1.0: Model menjelaskan 100% variansi (sempurna, jarang terjadi)
+R² > 0.9: Excellent (sangat baik)
+R² > 0.8: Sangat baik
+R² > 0.7: Baik
+R² > 0.5: Cukup
+R² < 0.5: Lemah
+R² = 0: Model tidak menjelaskan variansi sama sekali
+R² negatif: Model lebih buruk dari baseline (rata-rata)
+Dalam konteks penelitian Anda
+Untuk model prediksi LOS:
+R² = 0.0025 (0.25%)
+Artinya model hanya menjelaskan 0.25% variansi LOS
+Ini sangat rendah, menunjukkan model belum menangkap sebagian besar faktor yang mempengaruhi LOS
+Mengapa R² rendah untuk model LOS?
+LOS dipengaruhi banyak faktor kompleks yang mungkin tidak tertangkap fitur yang ada
+Variabilitas tinggi: LOS sangat bervariasi antar pasien
+Faktor eksternal: keputusan klinis, ketersediaan tempat tidur, kondisi sosial, dll
+Interaksi kompleks: interaksi antar faktor yang sulit dimodelkan
+Perbandingan dengan model mortalitas
+Model Mortalitas (klasifikasi): Accuracy 92.83%, AUC 92.82% — sangat baik
+Model LOS (regresi): R² 0.25% — perlu perbaikan
+Kesimpulan: R² mengukur seberapa baik model regresi menjelaskan variansi target. Untuk model LOS, nilai 0.25% menunjukkan model masih perlu ditingkatkan, misalnya dengan menambahkan fitur atau menggunakan pendekatan yang berbeda.
+
+
+Berikut penjelasan RMSE dan MAE:
+RMSE (Root Mean Squared Error)
+Apa itu RMSE?
+RMSE mengukur rata-rata error prediksi dengan memberikan penalti lebih besar pada error yang besar.
+Rumus:
+RMSE = √(Σ(actual - predicted)² / n)
+Karakteristik:
+Satuan sama dengan variabel target (dalam kasus ini: hari)
+Sensitif terhadap outlier (error besar dihitung lebih berat)
+Semakin kecil RMSE, semakin baik model
+Tidak pernah negatif (akar dari kuadrat)
+Contoh interpretasi:
+Jika RMSE = 10.92 hari:
+Rata-rata error prediksi sekitar 10.92 hari
+Beberapa prediksi bisa lebih akurat, beberapa kurang akurat
+Error besar (mis. selisih 20 hari) dihitung lebih berat dibanding error kecil (mis. selisih 2 hari)
+MAE (Mean Absolute Error)
+Apa itu MAE?
+MAE mengukur rata-rata absolute error tanpa memberikan penalti ekstra pada error besar.
+Rumus:
+MAE = Σ|actual - predicted| / n
+Karakteristik:
+Satuan sama dengan variabel target (hari)
+Lebih robust terhadap outlier dibanding RMSE
+Semakin kecil MAE, semakin baik model
+Tidak pernah negatif (nilai absolut)
+Contoh interpretasi:
+Jika MAE = 9.42 hari:
+Rata-rata absolute error adalah 9.42 hari
+Semua error diperlakukan sama (tanpa penalti ekstra untuk error besar)
+Memberikan gambaran yang lebih stabil tentang performa model
+Perbandingan RMSE vs MAE
+Aspek	RMSE	MAE
+Penalti untuk error besar	Ya (kuadrat)	Tidak (sama)
+Sensitivitas terhadap outlier	Tinggi	Rendah
+Interpretasi	Lebih konservatif	Lebih intuitif
+Kapan digunakan	Ketika error besar tidak diinginkan	Ketika semua error sama pentingnya
+Contoh sederhana:
+Misalkan ada 3 prediksi dengan error:
+Error 1: 5 hari
+Error 2: 10 hari
+Error 3: 15 hari
+MAE = (5 + 10 + 15) / 3 = 10 hari
+RMSE = √((5² + 10² + 15²) / 3) = √((25 + 100 + 225) / 3) = √(116.67) = 10.80 hari
+RMSE sedikit lebih besar karena memberikan penalti lebih pada error 15 hari.
+Dalam konteks penelitian Anda
+Hasil evaluasi model LOS:
+RMSE: 10.92 hari
+MAE: 9.42 hari
+R²: 0.0025 (0.25%)
+Interpretasi:
+MAE (9.42 hari) < RMSE (10.92 hari)
+Menunjukkan sebagian besar error tidak terlalu besar
+Ada beberapa outlier yang membuat RMSE lebih tinggi
+RMSE (10.92 hari) vs Standar Deviasi LOS (10.94 hari)
+RMSE hampir sama dengan standar deviasi
+Artinya error prediksi hampir sama dengan variabilitas data itu sendiri
+Ini menunjukkan model belum mampu mengurangi ketidakpastian dengan signifikan
+R² sangat rendah (0.25%)
+Konsisten dengan RMSE dan MAE yang relatif tinggi
+Model hanya menjelaskan 0.25% variansi LOS
+Kesimpulan
+RMSE: mengukur rata-rata error dengan penalti lebih besar pada error besar; cocok ketika error besar tidak diinginkan.
+MAE: mengukur rata-rata absolute error; lebih robust terhadap outlier dan lebih intuitif.
+Untuk model LOS Anda:
+MAE 9.42 hari berarti rata-rata prediksi meleset sekitar 9.42 hari
+RMSE 10.92 hari sedikit lebih tinggi karena ada beberapa prediksi dengan error besar
+Keduanya relatif tinggi dibanding variabilitas data, menunjukkan model masih perlu perbaikan
+Keduanya penting untuk mengevaluasi model regresi, dengan interpretasi yang saling melengkapi.

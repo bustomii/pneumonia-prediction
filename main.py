@@ -25,7 +25,7 @@ def main():
     print("=" * 70)
     
     # Konfigurasi
-    RAW_DATA_PATH = "data/pneumonia_dataset.xlsx"  # Ganti dengan path dataset Anda
+    RAW_DATA_PATH = "data/data-669-patients.xlsx"
     PROCESSED_DATA_PATH = "data/processed_pneumonia_data.csv"
     
     # Step 1: Data Preprocessing
@@ -61,21 +61,21 @@ def main():
         # Train LightGBM untuk mortalitas
         mortality_model, mortality_pred = train_mortality_model(
             data_path=PROCESSED_DATA_PATH,
-            target_col='mortality',  # Ganti dengan nama kolom target yang sesuai
+            target_col='Mortality',
             test_size=0.2
         )
         
         # Train Extra Tree untuk mortalitas
         et_mortality_model = train_extra_tree_model(
             data_path=PROCESSED_DATA_PATH,
-            target_col='mortality',
+            target_col='Mortality',
             test_size=0.2
         )
         
         print("\n✓ Model mortalitas berhasil ditraining!")
     except Exception as e:
         print(f"\n✗ Error training model mortalitas: {str(e)}")
-        print("Pastikan kolom 'mortality' ada di dataset")
+        print("Pastikan kolom 'Mortality' ada di dataset")
     
     # Step 3: Training Model LOS
     print("\n" + "=" * 70)
@@ -86,21 +86,21 @@ def main():
         # Train LightGBM untuk LOS
         los_model, los_pred = train_los_model(
             data_path=PROCESSED_DATA_PATH,
-            target_col='LOS',  # Ganti dengan nama kolom target yang sesuai
+            target_col='LOS_days',
             test_size=0.2
         )
         
         # Train Extra Tree Regressor untuk LOS
         et_los_model = train_extra_tree_regressor(
             data_path=PROCESSED_DATA_PATH,
-            target_col='LOS',
+            target_col='LOS_days',
             test_size=0.2
         )
         
         print("\n✓ Model LOS berhasil ditraining!")
     except Exception as e:
         print(f"\n✗ Error training model LOS: {str(e)}")
-        print("Pastikan kolom 'LOS' ada di dataset")
+        print("Pastikan kolom 'LOS_days' ada di dataset")
     
     # Step 4: Prediksi (contoh)
     print("\n" + "=" * 70)
@@ -108,30 +108,32 @@ def main():
     print("=" * 70)
     
     # Buat data contoh untuk prediksi
-    # Ganti dengan data aktual yang ingin diprediksi
+    # Menggunakan kolom yang sesuai dengan dataset
     sample_data = pd.DataFrame({
         'Age': [79, 76, 65],
-        'Sex': [1, 0, 1],
+        'Sex': ['M', 'F', 'M'],
         'BMI': [18.5, 19.2, 20.0],
         'Heart_rate': [100, 95, 90],
-        'Respiration': [30, 24, 22],
-        'Oxygen': [1, 0, 1],
-        'Shock_vital': [1, 0, 0],
-        'T': [36.9, 37.6, 37.0],
+        'Respiration_rate': [30, 24, 22],
+        'Temperature': [36.9, 37.6, 37.0],
+        'Systolic_BP': [120, 130, 125],
+        'Oxygen_need': ['Yes', 'No', 'Yes'],
+        'Shock_vital': ['Yes', 'No', 'No'],
         'WBC': [9.8, 10.3, 8.5],
-        'Hgb': [11.2, 11.8, 12.0],
-        'Platelet': [25.0, 21.6, 22.0],
+        'Hemoglobin': [11.2, 11.8, 12.0],
+        'Platelet': [250, 216, 220],
         'Total_protein': [6.7, 6.8, 7.0],
         'Albumin': [2.8, 3.3, 3.0],
-        'Na': [138, 137, 139],
+        'Sodium': [138, 137, 139],
         'BUN': [29, 19, 20],
         'CRP': [15.7, 8.6, 10.0],
-        'LOC': [1, 0, 0],
-        'Bedsore': [1, 0, 0],
-        'Aspiration': [1, 0, 0],
-        'ADL': [1, 0, 0],
+        'LOC': ['Yes', 'No', 'No'],
+        'Bedsore': ['Yes', 'No', 'No'],
+        'Aspiration': ['Yes', 'No', 'No'],
+        'ADL_category': ['Dependent', 'Independent', 'Independent'],
         'CCI': [6, 2, 3],
-        'Insecure': [1, 0, 0]
+        'Nursing_insurance': ['Yes', 'Yes', 'No'],
+        'Key_person': ['Son', 'Daughter', 'Spouse']
     })
     
     try:
