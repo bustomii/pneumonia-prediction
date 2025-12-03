@@ -123,12 +123,27 @@ def create_bab4_docx():
     
     doc.add_paragraph('Karakteristik Demografis:', style='Custom Heading 3')
     
+    # Tambahkan gambar distribusi jenis kelamin
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    img_path = Path(__file__).parent.parent / 'visualizations' / '1_distribusi_jenis_kelamin.png'
+    if img_path.exists():
+        run = p.add_run()
+        run.add_picture(str(img_path), width=Inches(5))
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run('Gambar 4.1 Distribusi Pasien Berdasarkan Jenis Kelamin')
+        run.font.italic = True
+        run.font.size = Pt(10)
+    
     p = doc.add_paragraph()
     p.add_run('Berdasarkan analisis deskriptif, karakteristik demografis dataset menunjukkan distribusi sebagai berikut: ').font.name = 'Times New Roman'
     p.add_run('jumlah total pasien sebanyak 669 orang').font.bold = True
     p.add_run(', dengan komposisi jenis kelamin menunjukkan ').font.name = 'Times New Roman'
     p.add_run('laki-laki sebanyak 468 pasien (70.0%) dan perempuan sebanyak 201 pasien (30.0%)').font.bold = True
-    p.add_run('. Distribusi usia menunjukkan ').font.name = 'Times New Roman'
+    p.add_run('. Seperti terlihat pada ').font.name = 'Times New Roman'
+    p.add_run('Gambar 4.1').font.bold = True
+    p.add_run(', distribusi jenis kelamin menunjukkan dominasi laki-laki dengan proporsi 70%. Distribusi usia menunjukkan ').font.name = 'Times New Roman'
     p.add_run('rata-rata 77.64 tahun dengan standar deviasi 10.40 tahun').font.bold = True
     p.add_run(', dengan rentang usia 60-94 tahun. Karakteristik demografis ini mencerminkan populasi pasien pneumonia yang umumnya berusia lanjut, yang sesuai dengan literatur yang menyatakan bahwa pneumonia lebih sering terjadi pada populasi geriatri.').font.name = 'Times New Roman'
     
@@ -141,10 +156,28 @@ def create_bab4_docx():
     p.add_run('337 pasien (50.4%) tidak mengalami mortalitas dan 332 pasien (49.6%) mengalami mortalitas').font.bold = True
     p.add_run('. Distribusi yang seimbang ini menguntungkan untuk model klasifikasi karena menghindari masalah class imbalance yang dapat mempengaruhi performa model.').font.name = 'Times New Roman'
     
+    # Tambahkan gambar distribusi mortalitas
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    img_path = Path(__file__).parent.parent / 'visualizations' / '2_distribusi_mortalitas.png'
+    if img_path.exists():
+        run = p.add_run()
+        run.add_picture(str(img_path), width=Inches(6))
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run('Gambar 4.2 Distribusi Mortalitas Pasien')
+        run.font.italic = True
+        run.font.size = Pt(10)
+    
+    p = doc.add_paragraph()
+    p.add_run('Seperti terlihat pada ').font.name = 'Times New Roman'
+    p.add_run('Gambar 4.2').font.bold = True
+    p.add_run(', distribusi mortalitas menunjukkan keseimbangan yang baik antara kedua kelas, dengan pie chart dan bar chart yang menunjukkan proporsi yang hampir sama. Distribusi yang seimbang ini penting untuk memastikan bahwa model dapat mempelajari pola dari kedua kelas dengan proporsi yang sama, sehingga tidak bias terhadap kelas mayoritas.').font.name = 'Times New Roman'
+    
     # Tambahkan gambar distribusi LOS
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '3_distribusi_los.png'
+    img_path = Path(__file__).parent.parent / 'visualizations' / '3_distribusi_los.png'
     if img_path.exists():
         run = p.add_run()
         run.add_picture(str(img_path), width=Inches(6))
@@ -172,26 +205,13 @@ def create_bab4_docx():
     
     doc.add_paragraph('4.1.3 Analisis Distribusi Variabel', style='Custom Heading 3')
     
-    # Tambahkan gambar distribusi jenis kelamin
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '1_distribusi_jenis_kelamin.png'
-    if img_path.exists():
-        run = p.add_run()
-        run.add_picture(str(img_path), width=Inches(5))
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run('Gambar 4.1 Distribusi Pasien Berdasarkan Jenis Kelamin')
-        run.font.italic = True
-        run.font.size = Pt(10)
-    
     p = doc.add_paragraph()
     p.add_run('Variabel Kategorikal: ').font.bold = True
-    p.add_run('Dataset mengandung berbagai variabel kategorikal yang mencerminkan karakteristik pasien. Seperti terlihat pada ').font.name = 'Times New Roman'
-    p.add_run('Gambar 4.1').font.bold = True
-    p.add_run(', variabel ').font.name = 'Times New Roman'
+    p.add_run('Dataset mengandung berbagai variabel kategorikal yang mencerminkan karakteristik pasien. Variabel ').font.name = 'Times New Roman'
     p.add_run('Sex').font.bold = True
-    p.add_run(' merupakan variabel binary (M/F) dengan distribusi 70% laki-laki (468 pasien) dan 30% perempuan (201 pasien). Variabel-variabel binary lainnya meliputi ').font.name = 'Times New Roman'
+    p.add_run(' merupakan variabel binary (M/F) dengan distribusi 70% laki-laki (468 pasien) dan 30% perempuan (201 pasien), seperti terlihat pada ').font.name = 'Times New Roman'
+    p.add_run('Gambar 4.1 di bagian Karakteristik Demografis').font.bold = True
+    p.add_run('. Variabel-variabel binary lainnya meliputi ').font.name = 'Times New Roman'
     p.add_run('Oxygen_need, Shock_vital, LOC (Level of Consciousness), Bedsore, Aspiration, dan Nursing_insurance').font.bold = True
     p.add_run('. Variabel ').font.name = 'Times New Roman'
     p.add_run('ADL_category').font.bold = True
@@ -199,10 +219,44 @@ def create_bab4_docx():
     p.add_run('Key_person').font.bold = True
     p.add_run(' memiliki 4 kategori (Son, Daughter, Spouse, Others).').font.name = 'Times New Roman'
     
+    # Tambahkan gambar variabel kategorikal
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    img_path = Path(__file__).parent.parent / 'visualizations' / '6_variabel_kategorikal.png'
+    if img_path.exists():
+        run = p.add_run()
+        run.add_picture(str(img_path), width=Inches(6))
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run('Gambar 4.6 Distribusi Variabel Kategorikal')
+        run.font.italic = True
+        run.font.size = Pt(10)
+    
+    p = doc.add_paragraph()
+    p.add_run('Gambar 4.6').font.bold = True
+    p.add_run(' menunjukkan distribusi berbagai variabel kategorikal dalam dataset. Visualisasi ini memberikan gambaran tentang proporsi pasien dengan berbagai karakteristik klinis. Sebagai contoh, dapat dilihat proporsi pasien yang memerlukan oksigen, mengalami shock vital, memiliki gangguan kesadaran, mengalami bedsore, atau memiliki aspirasi. Distribusi ini penting untuk memahami karakteristik populasi penelitian dan dapat membantu dalam interpretasi hasil model.').font.name = 'Times New Roman'
+    
+    # Tambahkan gambar ADL dan Key Person
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    img_path = Path(__file__).parent.parent / 'visualizations' / '7_adl_key_person.png'
+    if img_path.exists():
+        run = p.add_run()
+        run.add_picture(str(img_path), width=Inches(6))
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run('Gambar 4.7 Distribusi ADL Category dan Key Person')
+        run.font.italic = True
+        run.font.size = Pt(10)
+    
+    p = doc.add_paragraph()
+    p.add_run('Gambar 4.7').font.bold = True
+    p.add_run(' menunjukkan distribusi ADL Category dan Key Person. ADL Category mencerminkan kemampuan fungsional pasien, yang merupakan faktor penting dalam prognosis. Key Person mencerminkan dukungan sosial yang tersedia untuk pasien, yang juga dapat mempengaruhi outcome. Distribusi ini menunjukkan variasi yang memadai dalam kedua variabel, memungkinkan analisis yang bermakna.').font.name = 'Times New Roman'
+    
     # Tambahkan gambar distribusi usia
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '4_distribusi_usia.png'
+    img_path = Path(__file__).parent.parent / 'visualizations' / '4_distribusi_usia.png'
     if img_path.exists():
         run = p.add_run()
         run.add_picture(str(img_path), width=Inches(6))
@@ -229,7 +283,7 @@ def create_bab4_docx():
     # Tambahkan gambar heatmap korelasi
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '5_heatmap_korelasi.png'
+    img_path = Path(__file__).parent.parent / 'visualizations' / '5_heatmap_korelasi.png'
     if img_path.exists():
         run = p.add_run()
         run.add_picture(str(img_path), width=Inches(6))
@@ -242,6 +296,57 @@ def create_bab4_docx():
     p = doc.add_paragraph()
     p.add_run('Gambar 4.5').font.bold = True
     p.add_run(' menunjukkan heatmap korelasi antar variabel numerik. Korelasi yang tinggi (mendekati 1 atau -1) menunjukkan hubungan linear yang kuat, sedangkan korelasi yang rendah (mendekati 0) menunjukkan hubungan yang lemah. Beberapa temuan penting dari heatmap ini: (1) Usia menunjukkan korelasi positif dengan CCI, yang konsisten dengan fakta bahwa komorbiditas meningkat seiring bertambahnya usia; (2) Parameter laboratorium seperti Albumin dan Total protein menunjukkan korelasi positif, yang mencerminkan status nutrisi; (3) CRP menunjukkan korelasi dengan beberapa parameter inflamasi, yang sesuai dengan perannya sebagai marker inflamasi; (4) Mortalitas menunjukkan korelasi dengan beberapa variabel, namun korelasi tidak terlalu kuat, menunjukkan bahwa prediksi mortalitas memerlukan kombinasi dari berbagai faktor.').font.name = 'Times New Roman'
+    
+    # Tambahkan gambar parameter laboratorium
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    img_path = Path(__file__).parent.parent / 'visualizations' / '9_parameter_laboratorium.png'
+    if img_path.exists():
+        run = p.add_run()
+        run.add_picture(str(img_path), width=Inches(6))
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run('Gambar 4.8 Distribusi Parameter Laboratorium')
+        run.font.italic = True
+        run.font.size = Pt(10)
+    
+    p = doc.add_paragraph()
+    p.add_run('Gambar 4.8').font.bold = True
+    p.add_run(' menunjukkan distribusi berbagai parameter laboratorium yang penting dalam penilaian pasien pneumonia. Setiap histogram menunjukkan distribusi nilai parameter tersebut, dengan garis merah menunjukkan mean dan memberikan gambaran tentang variabilitas nilai. Parameter seperti WBC dan CRP menunjukkan variasi yang luas, mencerminkan spektrum keparahan inflamasi. Albumin dan Hemoglobin menunjukkan distribusi yang relatif normal, dengan beberapa pasien menunjukkan nilai rendah yang mengindikasikan malnutrisi atau anemia.').font.name = 'Times New Roman'
+    
+    # Tambahkan gambar scatter plot
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    img_path = Path(__file__).parent.parent / 'visualizations' / '8_scatter_usia_los.png'
+    if img_path.exists():
+        run = p.add_run()
+        run.add_picture(str(img_path), width=Inches(5))
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run('Gambar 4.9 Hubungan Usia dan Length of Stay berdasarkan Mortalitas')
+        run.font.italic = True
+        run.font.size = Pt(10)
+    
+    p = doc.add_paragraph()
+    p.add_run('Gambar 4.9').font.bold = True
+    p.add_run(' menunjukkan scatter plot hubungan antara usia dan length of stay, dengan warna yang berbeda untuk pasien dengan dan tanpa mortalitas. Visualisasi ini menunjukkan bahwa: (1) Tidak ada hubungan linear yang kuat antara usia dan LOS, menunjukkan bahwa faktor lain juga mempengaruhi LOS; (2) Pasien dengan mortalitas (merah) tersebar di berbagai usia dan LOS, menunjukkan bahwa mortalitas tidak hanya dipengaruhi oleh usia atau LOS saja; (3) Terdapat beberapa outlier dengan LOS yang sangat panjang, yang mungkin terkait dengan komplikasi atau kondisi khusus.').font.name = 'Times New Roman'
+    
+    # Tambahkan gambar mortalitas berdasarkan variabel kategorikal
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    img_path = Path(__file__).parent.parent / 'visualizations' / '10_mortalitas_kategorikal.png'
+    if img_path.exists():
+        run = p.add_run()
+        run.add_picture(str(img_path), width=Inches(6))
+        p = doc.add_paragraph()
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        run = p.add_run('Gambar 4.10 Perbandingan Mortalitas berdasarkan Variabel Kategorikal')
+        run.font.italic = True
+        run.font.size = Pt(10)
+    
+    p = doc.add_paragraph()
+    p.add_run('Gambar 4.10').font.bold = True
+    p.add_run(' menunjukkan perbandingan mortalitas berdasarkan berbagai variabel kategorikal. Visualisasi ini sangat penting karena menunjukkan hubungan antara faktor risiko dan outcome. Sebagai contoh, dapat dilihat bahwa pasien dengan shock vital, LOC, atau bedsore memiliki proporsi mortalitas yang lebih tinggi dibanding pasien tanpa kondisi tersebut. Visualisasi ini memberikan insight tentang faktor-faktor yang paling berpengaruh terhadap mortalitas, yang dapat digunakan untuk validasi hasil model dan pemahaman yang lebih baik tentang patofisiologi penyakit.').font.name = 'Times New Roman'
     
     # 4.2 Hasil Data Preprocessing
     doc.add_paragraph('4.2 Hasil Data Preprocessing', style='Custom Heading 2')
@@ -434,91 +539,6 @@ def create_bab4_docx():
     
     p = doc.add_paragraph()
     p.add_run('Model alternatif Extra Tree Regressor juga ditraining untuk validasi dan perbandingan performa dengan LightGBM. Perbandingan ini memungkinkan evaluasi robust terhadap pilihan algoritma dan memastikan bahwa hasil yang diperoleh tidak hanya spesifik untuk satu algoritma tertentu.').font.name = 'Times New Roman'
-    
-    # Tambahkan gambar variabel kategorikal
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '6_variabel_kategorikal.png'
-    if img_path.exists():
-        run = p.add_run()
-        run.add_picture(str(img_path), width=Inches(6))
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run('Gambar 4.6 Distribusi Variabel Kategorikal')
-        run.font.italic = True
-        run.font.size = Pt(10)
-    
-    p = doc.add_paragraph()
-    p.add_run('Gambar 4.6').font.bold = True
-    p.add_run(' menunjukkan distribusi berbagai variabel kategorikal dalam dataset. Visualisasi ini memberikan gambaran tentang proporsi pasien dengan berbagai karakteristik klinis. Sebagai contoh, dapat dilihat proporsi pasien yang memerlukan oksigen, mengalami shock vital, memiliki gangguan kesadaran, mengalami bedsore, atau memiliki aspirasi. Distribusi ini penting untuk memahami karakteristik populasi penelitian dan dapat membantu dalam interpretasi hasil model.').font.name = 'Times New Roman'
-    
-    # Tambahkan gambar ADL dan Key Person
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '7_adl_key_person.png'
-    if img_path.exists():
-        run = p.add_run()
-        run.add_picture(str(img_path), width=Inches(6))
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run('Gambar 4.7 Distribusi ADL Category dan Key Person')
-        run.font.italic = True
-        run.font.size = Pt(10)
-    
-    p = doc.add_paragraph()
-    p.add_run('Gambar 4.7').font.bold = True
-    p.add_run(' menunjukkan distribusi ADL Category dan Key Person. ADL Category mencerminkan kemampuan fungsional pasien, yang merupakan faktor penting dalam prognosis. Key Person mencerminkan dukungan sosial yang tersedia untuk pasien, yang juga dapat mempengaruhi outcome. Distribusi ini menunjukkan variasi yang memadai dalam kedua variabel, memungkinkan analisis yang bermakna.').font.name = 'Times New Roman'
-    
-    # Tambahkan gambar scatter plot
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '8_scatter_usia_los.png'
-    if img_path.exists():
-        run = p.add_run()
-        run.add_picture(str(img_path), width=Inches(5))
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run('Gambar 4.8 Hubungan Usia dan Length of Stay berdasarkan Mortalitas')
-        run.font.italic = True
-        run.font.size = Pt(10)
-    
-    p = doc.add_paragraph()
-    p.add_run('Gambar 4.8').font.bold = True
-    p.add_run(' menunjukkan scatter plot hubungan antara usia dan length of stay, dengan warna yang berbeda untuk pasien dengan dan tanpa mortalitas. Visualisasi ini menunjukkan bahwa: (1) Tidak ada hubungan linear yang kuat antara usia dan LOS, menunjukkan bahwa faktor lain juga mempengaruhi LOS; (2) Pasien dengan mortalitas (merah) tersebar di berbagai usia dan LOS, menunjukkan bahwa mortalitas tidak hanya dipengaruhi oleh usia atau LOS saja; (3) Terdapat beberapa outlier dengan LOS yang sangat panjang, yang mungkin terkait dengan komplikasi atau kondisi khusus.').font.name = 'Times New Roman'
-    
-    # Tambahkan gambar parameter laboratorium
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '9_parameter_laboratorium.png'
-    if img_path.exists():
-        run = p.add_run()
-        run.add_picture(str(img_path), width=Inches(6))
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run('Gambar 4.9 Distribusi Parameter Laboratorium')
-        run.font.italic = True
-        run.font.size = Pt(10)
-    
-    p = doc.add_paragraph()
-    p.add_run('Gambar 4.9').font.bold = True
-    p.add_run(' menunjukkan distribusi berbagai parameter laboratorium yang penting dalam penilaian pasien pneumonia. Setiap histogram menunjukkan distribusi nilai parameter tersebut, dengan garis merah menunjukkan mean dan memberikan gambaran tentang variabilitas nilai. Parameter seperti WBC dan CRP menunjukkan variasi yang luas, mencerminkan spektrum keparahan inflamasi. Albumin dan Hemoglobin menunjukkan distribusi yang relatif normal, dengan beberapa pasien menunjukkan nilai rendah yang mengindikasikan malnutrisi atau anemia.').font.name = 'Times New Roman'
-    
-    # Tambahkan gambar mortalitas berdasarkan variabel kategorikal
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    img_path = Path(__file__).parent / 'visualizations' / '10_mortalitas_kategorikal.png'
-    if img_path.exists():
-        run = p.add_run()
-        run.add_picture(str(img_path), width=Inches(6))
-        p = doc.add_paragraph()
-        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        run = p.add_run('Gambar 4.10 Perbandingan Mortalitas berdasarkan Variabel Kategorikal')
-        run.font.italic = True
-        run.font.size = Pt(10)
-    
-    p = doc.add_paragraph()
-    p.add_run('Gambar 4.10').font.bold = True
-    p.add_run(' menunjukkan perbandingan mortalitas berdasarkan berbagai variabel kategorikal. Visualisasi ini sangat penting karena menunjukkan hubungan antara faktor risiko dan outcome. Sebagai contoh, dapat dilihat bahwa pasien dengan shock vital, LOC, atau bedsore memiliki proporsi mortalitas yang lebih tinggi dibanding pasien tanpa kondisi tersebut. Visualisasi ini memberikan insight tentang faktor-faktor yang paling berpengaruh terhadap mortalitas, yang dapat digunakan untuk validasi hasil model dan pemahaman yang lebih baik tentang patofisiologi penyakit.').font.name = 'Times New Roman'
     
     # 4.6 Hasil Prediksi
     doc.add_paragraph('4.6 Hasil Prediksi', style='Custom Heading 2')
@@ -966,6 +986,21 @@ def create_bab5_docx():
 
 if __name__ == '__main__':
     print("Membuat dokumen BAB IV dan BAB V dalam format .docx...")
+    
+    # Verifikasi path visualizations
+    vis_path = Path(__file__).parent.parent / 'visualizations'
+    print(f"\nMencari visualisasi di: {vis_path}")
+    if vis_path.exists():
+        print(f"✓ Folder visualizations ditemukan!")
+        png_files = list(vis_path.glob('*.png'))
+        print(f"✓ Ditemukan {len(png_files)} file gambar")
+        for png in sorted(png_files):
+            print(f"  - {png.name}")
+    else:
+        print(f"✗ Folder visualizations tidak ditemukan di: {vis_path}")
+        print("Pastikan folder visualizations ada di: reports/visualizations/")
+    
+    print("\n" + "="*60)
     create_bab4_docx()
     create_bab5_docx()
     print("\n✓ Semua dokumen berhasil dibuat!")
